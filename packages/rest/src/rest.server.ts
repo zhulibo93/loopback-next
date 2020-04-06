@@ -27,7 +27,7 @@ import {
   OperationObject,
   ServerObject,
 } from '@loopback/openapi-v3';
-import {AssertionError} from 'assert';
+import assert, {AssertionError} from 'assert';
 import cors from 'cors';
 import debugFactory from 'debug';
 import express, {ErrorRequestHandler} from 'express';
@@ -167,7 +167,7 @@ export class RestServer extends Context implements Server, HttpServerLike {
 
   protected _httpServer: HttpServer | undefined;
 
-  protected _expressApp: express.Application;
+  protected _expressApp?: express.Application;
 
   get listening(): boolean {
     return this._httpServer ? this._httpServer.listening : false;
@@ -301,6 +301,7 @@ export class RestServer extends Context implements Server, HttpServerLike {
    * Apply express settings.
    */
   protected _applyExpressSettings() {
+    assertExists(this._expressApp, 'this._expressApp');
     const settings = this.config.expressSettings;
     for (const key in settings) {
       this._expressApp.set(key, settings[key]);
@@ -315,6 +316,7 @@ export class RestServer extends Context implements Server, HttpServerLike {
    * to redirect to externally hosted API explorer
    */
   protected _setupOpenApiSpecEndpoints() {
+    assertExists(this._expressApp, 'this._expressApp');
     if (this.config.openApiSpec.disabled) return;
     const mapping = this.config.openApiSpec.endpointMapping!;
     // Serving OpenAPI spec
@@ -1005,6 +1007,16 @@ export class RestServer extends Context implements Server, HttpServerLike {
   ): void {
     this._externalRoutes.mountRouter(basePath, router, spec);
   }
+}
+
+/**
+ * An assertion type guard for TypeScript to instruct the compiler that the
+ * given value is not `null` or `undefined.
+ * @param val - A value can be `undefined` or `null`
+ * @param name - Name of the value
+ */
+function assertExists<T>(val: T, name: string): asserts val is NonNullable<T> {
+  assert(val != null, `The value of ${name} cannot be null or undefined`);
 }
 
 /**

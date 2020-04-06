@@ -171,8 +171,13 @@ describe('RestServer', () => {
         }
 
         get expressApp() {
+          assertExists(this._expressApp);
           return this._expressApp;
         }
+      }
+
+      function assertExists<T>(val: T): asserts val is NonNullable<T> {
+        expect(val != null).to.be.true();
       }
 
       it('honors expressSettings', () => {
