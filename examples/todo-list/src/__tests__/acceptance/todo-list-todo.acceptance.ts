@@ -48,10 +48,27 @@ describe('TodoListApplication', () => {
       .send(todo)
       .expect(200);
 
-    const expected = {...todo, todoListId: persistedTodoList.id};
+    /*
+     * TypeScript 3.9.x reports an error for
+     * `expect(toJSON(created)).to.deepEqual({id: response.body.id, ...expected});`
+     * with the following reasoning:
+     * 1. The inferred type of `expected` has an `id` (non-optional) property.
+     * 2. The spread assignment has overriding property `id` from the 1st and 2nd
+     * argument.
+     * 3. The TS compiler think the 1st `id` will be ALWAYS overridden and
+     * it is probably a bug in the code.
+     * 4. In our case, `expected.id` is not defined when it's instantiated from
+     * `Todo` class without `create`. Please note the `Todo.prototype.id` is
+     * NOT marked as optional.
+     */
+    const expected: Pick<Todo, 'todoListId'> = {
+      ...todo,
+      todoListId: persistedTodoList.id,
+    };
     expect(response.body).to.containEql(expected);
 
     const created = await todoRepo.findById(response.body.id);
+
     expect(toJSON(created)).to.deepEqual({id: response.body.id, ...expected});
   });
 
