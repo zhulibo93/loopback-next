@@ -1,0 +1,83 @@
+<head>
+  {% include analytics.html %}
+</head>
+
+<table width="750">
+  <thead>
+    <tr>
+      <th width="200">LB3 Commands</th>
+      <th width="200">LB4 Commands</th>
+      <th>Description</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td>
+        <code>lb</code>
+      </td>
+      <td>
+        <code>lb4 app</code>
+      </td>
+      <td> Create a new application
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb datasource</code>
+      </td>
+      <td>
+        <code>lb4 datasource</code>
+      </td>
+      <td> Create a new datasource
+      </td>
+    </tr>
+
+
+
+    <tr>
+      <td>
+        <code>lb model</code>
+      </td>
+      <td>
+        <code>lb4 model</code>
+      </td>
+      <td> Create a new model. In LB3, this would create the model, but you would automatically get all the model methods and remote methods. In LB4, this command only creates the model; you must also create a repository to handle the CRUD operations of your model, and you must create a controller to define your model's REST API endpoints.
+      </td>
+    </tr>
+
+
+
+    <tr>
+      <td>
+        <code>lb relation</code>
+      </td>
+      <td>
+        <code>lb4 relation</code>
+      </td>
+      <td> Create a relation between two models
+      </td>
+    </tr>
+
+
+
+    <tr>
+      <td>
+        <code>lb swagger</code>
+      </td>
+      <td>
+        <code>lb4 openapi</code>
+      </td>
+
+      <td>
+        In LB3, create a fully functioning application using an API defined using swagger 2.0.
+        In LB4, create a fully functioning application using an OpenAPI 3.0 specification
+      </td>
+      <td>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

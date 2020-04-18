@@ -1,0 +1,104 @@
+<head>
+  {% include analytics.html %}
+</head>
+
+<table width="750">
+  <thead>
+    <tr>
+      <th width="200">Commands</th>
+      <th>Description</th>
+      <th>Workaround in LB4</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td>
+        <code>lb bluemix</code>
+      </td>
+      <td> Create a new application destined in Bluemix
+      </td>
+      <td> None
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb property</code>
+      </td>
+      <td>
+        Adds properties to an existing model
+      </td>
+      <td> Open the model file, and manually add a new property.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb acl</code>
+      </td>
+      <td>
+        Adds acl settings to models
+      </td>
+      <td> Use the @loopback/authentication and @loopback/authorization models to set up authentication and authorization manually.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb remote-method</code>
+      </td>
+      <td>
+        Adds a new remote method to a model
+      </td>
+      <td> Open the model's controller file and add a new method manually. Depending on the purpose of this new controller method, you may also need to a new method to the model's repository.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb middleware</code>
+      </td>
+      <td>
+        Add new middleware to the application
+      </td>
+      <td> There is <a href="https://github.com/strongloop/loopback-next/pull/5118">work in progress</a> to enable express middleware in the form of interceptors that you will need to create and register
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb boot-script</code>
+      </td>
+      <td>
+        Creates a skeleton boot script in server/boot directory. Allows for customized intialization of anything during boot phase
+      </td>
+      <td> Create a <a href="https://loopback.io/doc/en/lb4/Booting-an-Application.html#custom-booters">custom booter</a> for a new artifact, or create a <a href="https://loopback.io/doc/en/lb4/Life-cycle.html#overview">lifecycle observer</a> to run custom code during different phases of the application's lifecycle including startup.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>lb export-api-def</code>
+      </td>
+      <td>
+        Export the application's API definitions to a YAML or JSON file
+      </td>
+      <td> Visit the application's /openapi.json endpoint to access your OpenAPI specification in JSON format, or the /openapi.yaml endpoint for YAML. Alternatively, the OpenAPI specification file can also be accessed in code through the getApiSpec() function from your RestServer instance. Read <a href="https://loopback.io/doc/en/lb4/Defining-the-API-using-code-first-approach.html#reviewing-your-api-specification">Reviewing your API Specification</a> for more details.
+      </td>
+    </tr>
+
+
+    <tr>
+      <td>
+        <code>lb soap</code>
+      </td>
+      <td>
+        Create a SOAP client based on a soap service's WSDL file
+      </td>
+      <td> Manually create an application that calls the soap service through the loopback-connector-soap connector. Only LB3 steps and code snippets available at the moment. LB4 steps and code snippets would need to be revised in our documentation before you attempt this.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
