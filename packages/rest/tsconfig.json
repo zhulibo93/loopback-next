@@ -29,6 +29,9 @@
       "path": "../http-server/tsconfig.json"
     },
     {
+      "path": "../express/tsconfig.json"
+    },
+    {
       "path": "../openapi-v3/tsconfig.json"
     }
   ]
