@@ -289,9 +289,6 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
 
   async _generateDataSource() {
     const jsonFile = this.dataSourceInfo.jsonFileName;
-    const jsonTemplatePath = this.templatePath(
-      'src/datasources/datasource.config.json.ejs',
-    );
     if (debug.enabled) {
       debug(`Artifact output filename set to: ${jsonFile}`);
     }
@@ -306,8 +303,19 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
       specPath = path.relative(this.destinationRoot(), this.url);
     }
     this.dataSourceInfo.specPath = specPath;
+    const dsConfig = {
+      name: this.dataSourceInfo.name,
+      connector: 'openapi',
+      spec: this.dataSourceInfo.specPath,
+      validate: false,
+      positional: this.dataSourceInfo.usePositionalParams !== false,
+    };
 
-    this.copyTemplatedFiles(jsonTemplatePath, dest, this.dataSourceInfo);
+    this.dataSourceInfo.dsConfigString = utils.stringifyObject(dsConfig, {
+      // Prevent inlining the config into a single line, e.g.
+      // const config = {name: 'db', connector: 'memory'};
+      inlineCharacterLimit: 0,
+    });
 
     const classTemplatePath = this.templatePath(
       'src/datasources/datasource.ts.ejs',

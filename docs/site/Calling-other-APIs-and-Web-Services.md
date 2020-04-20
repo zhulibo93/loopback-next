@@ -98,7 +98,6 @@ petstore.json
 ? Validate spec against Swagger spec 2.0?: No
 ? Security config for making authenticated requests to API:
 ? Use positional parameters instead of named parameters?: No
-   create src/datasources/ds.datasource.config.json
    create src/datasources/ds.datasource.ts
 ```
 
