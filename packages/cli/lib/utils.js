@@ -556,27 +556,8 @@ exports.getDataSourceConnectorName = function (
   if (!dataSourceClass) {
     return false;
   }
-  let result;
-  let jsonFileContent;
-
-  const datasourceJSONFile = path.join(
-    datasourcesDir,
-    exports.dataSourceToJSONFileName(dataSourceClass),
-  );
-
-  debug(`reading ${datasourceJSONFile}`);
-  try {
-    jsonFileContent = JSON.parse(fs.readFileSync(datasourceJSONFile, 'utf8'));
-  } catch (err) {
-    debug(`Error reading file ${datasourceJSONFile}: ${err.message}`);
-    err.message = `Cannot load ${datasourceJSONFile}: ${err.message}`;
-    throw err;
-  }
-
-  if (jsonFileContent.connector) {
-    result = jsonFileContent.connector;
-  }
-  return result;
+  const config = exports.getDataSourceConfig(datasourcesDir, dataSourceClass);
+  return config.connector;
 };
 
 /**
@@ -598,7 +579,7 @@ exports.isConnectorOfType = function (
     return false;
   }
 
-  const config = getDataSourceConfig(datasourcesDir, dataSourceClass);
+  const config = exports.getDataSourceConfig(datasourcesDir, dataSourceClass);
 
   for (const connector of Object.values(connectors)) {
     const matchedConnector =
@@ -612,7 +593,16 @@ exports.isConnectorOfType = function (
   return null;
 };
 
-function getDataSourceConfig(datasourcesDir, dataSourceClass) {
+/**
+ * Load the datasource configuration. Supports both the current TypeScript-based
+ * flavor and legacy JSON-based configuration.
+ * @param {string} datasourcesDir path for sources
+ * @param {string} dataSourceClass class name for the datasource
+ */
+exports.getDataSourceConfig = function getDataSourceConfig(
+  datasourcesDir,
+  dataSourceClass,
+) {
   const config =
     readDataSourceConfigFromTypeScript(datasourcesDir, dataSourceClass) ||
     // Support legacy JSON-based configuration.
@@ -622,7 +612,7 @@ function getDataSourceConfig(datasourcesDir, dataSourceClass) {
 
   debug('datasource %s has config %o', dataSourceClass, config);
   return config;
-}
+};
 
 function readDataSourceConfigFromTypeScript(datasourcesDir, dataSourceClass) {
   const srcFile = path.join(
@@ -664,7 +654,7 @@ exports.getDataSourceName = function (datasourcesDir, dataSourceClass) {
   if (!dataSourceClass) {
     return false;
   }
-  const config = getDataSourceConfig(datasourcesDir, dataSourceClass);
+  const config = exports.getDataSourceConfig(datasourcesDir, dataSourceClass);
   return config.name;
 };
 

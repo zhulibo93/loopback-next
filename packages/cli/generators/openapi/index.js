@@ -115,13 +115,8 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
     // Find openapi data sources
     const openApiDataSources = dataSourceList.filter(ds => {
       debug(`data source inspecting item: ${ds.className}`);
-      const datasourceJSONFile = path.join(
-        dataSourcesDir,
-        utils.dataSourceToJSONFileName(ds.className),
-      );
+      const dsObj = utils.getDataSourceConfig(dataSourcesDir, ds.className);
 
-      debug(`reading ${datasourceJSONFile}`);
-      const dsObj = this.fs.readJSON(datasourceJSONFile);
       if (
         dsObj.connector === 'openapi' ||
         dsObj.connector === 'loopback-connector-openapi'
@@ -288,15 +283,6 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
   }
 
   async _generateDataSource() {
-    const jsonFile = this.dataSourceInfo.jsonFileName;
-    if (debug.enabled) {
-      debug(`Artifact output filename set to: ${jsonFile}`);
-    }
-    let dest = this.destinationPath(`src/datasources/${jsonFile}`);
-    if (debug.enabled) {
-      debug('Copying artifact to: %s', dest);
-    }
-
     let specPath = this.url;
     const parsed = parse(this.url);
     if (parsed.protocol == null) {
@@ -324,7 +310,7 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
     if (debug.enabled) {
       debug(`Artifact output filename set to: ${dataSourceFile}`);
     }
-    dest = this.destinationPath(`src/datasources/${dataSourceFile}`);
+    const dest = this.destinationPath(`src/datasources/${dataSourceFile}`);
     if (debug.enabled) {
       debug('Copying artifact to: %s', dest);
     }
@@ -445,7 +431,6 @@ module.exports = class OpenApiGenerator extends BaseGenerator {
     this.dataSourceInfo.className =
       utils.toClassName(this.dataSourceInfo.name) + 'DataSource';
     this.dataSourceInfo.fileName = utils.toFileName(this.dataSourceInfo.name);
-    this.dataSourceInfo.jsonFileName = `${this.dataSourceInfo.fileName}.datasource.config.json`;
     this.dataSourceInfo.outFile = `${this.dataSourceInfo.fileName}.datasource.ts`;
   }
 
