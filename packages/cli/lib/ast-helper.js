@@ -192,10 +192,10 @@ exports.getDataSourceConfig = function (fileContent) {
       case 'NumericLiteral':
         propValue = +prop.initializer.text;
         break;
-      case 'TrueLiteral':
+      case 'TrueKeyword':
         propValue = true;
         break;
-      case 'FalseLiteral':
+      case 'FalseKeyword':
         propValue = false;
         break;
       default:
