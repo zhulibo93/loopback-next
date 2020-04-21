@@ -3,12 +3,12 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-const {stringifyObject} = require('../../../lib/utils');
 const DATASOURCE_APP_PATH = 'src/datasources';
 const MODEL_APP_PATH = 'src/models';
 const REPOSITORY_APP_PATH = 'src/repositories';
 const CONFIG_PATH = '.';
 const fs = require('fs');
+const {getSourceForDataSourceClassWithConfig} = require('../../test-utils');
 
 exports.SANDBOX_FILES = [
   {
@@ -114,24 +114,3 @@ exports.SANDBOX_FILES = [
     ),
   },
 ];
-
-function getSourceForDataSourceClassWithConfig(className, config) {
-  return `
-import {inject} from '@loopback/core';
-import {juggler} from '@loopback/repository';
-
-const config = ${stringifyObject(config, {inlineCharacterLimit: 0})};
-
-export class ${className} extends juggler.DataSource {
-  static dataSourceName = config.name;
-  static readonly defaultConfig = config;
-
-  constructor(
-    @inject(\`datasources.config.${config.name}\`, {optional: true})
-    dsConfig: object = config,
-  ) {
-    super(dsConfig);
-  }
-}
-`;
-}
